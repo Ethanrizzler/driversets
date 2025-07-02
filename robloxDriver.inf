@@ -1,0 +1,62 @@
+;
+; robloxDriver.inf
+;
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = System ; TODO: specify appropriate Class
+ClassGuid   = {4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider    = %ethantherizzler_1%
+CatalogFile = robloxDriver.cat
+DriverVer = 07/02/2025,19.14.44.992
+PnpLockdown = 1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+robloxDriver.sys = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName% = Standard,NTamd64.10.0...16299 ; %13% support introduced in build 16299
+
+[Standard.NTamd64.10.0...16299]
+%robloxDriver.DeviceDesc% = robloxDriver_Device, Root\robloxDriver ; TODO: edit hw-id
+
+[robloxDriver_Device.NT]
+CopyFiles = File_Copy
+
+[File_Copy]
+robloxDriver.sys
+
+;-------------- Service installation
+[robloxDriver_Device.NT.Services]
+AddService = robloxDriver,%SPSVCINST_ASSOCSERVICE%, robloxDriver_Service_Inst
+
+; -------------- robloxDriver driver install sections
+[robloxDriver_Service_Inst]
+DisplayName    = %robloxDriver.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %13%\robloxDriver.sys
+
+[robloxDriver_Device.NT.Wdf]
+KmdfService = robloxDriver, robloxDriver_wdfsect
+
+[robloxDriver_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+SPSVCINST_ASSOCSERVICE = 0x00000002
+ManufacturerName = "<NiggaKerneöl>" ;TODO: Replace with your manufacturer name
+DiskName = "robloxDriver Installation Disk"
+robloxDriver.DeviceDesc = "robloxDriver Device"
+robloxDriver.SVCDESC = "robloxDriver Service"
